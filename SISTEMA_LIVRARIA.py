@@ -1,10 +1,10 @@
-# SISTEMA LIVRARIA
-
+''' SISTEMA LIVRARIA
+Dia 02/04/2026:
+Estou fazendo a refatoração do código, fazendo com que a estrutura esteja
+mais próxima do que estudei em aula, além de montar corrigir pequenos
+detalhes de comunicação com o usuário.
+'''
 try:
-    # função para separar informações
-    def linha():
-        print('-='*20)
-
     # criando classe 
     class Livro:
         # definindo os atributos da classe
@@ -16,10 +16,30 @@ try:
             self.ano = ano
             self.valor = valor
             self.quantidade_estoque = quantidade_estoque
+        
+        # função que mostra os livros cadastrados
+        def info_livros(self): # recebe o próprio objeto como parâmetro
+            print(f"\nCod#{self.codigo}")
+            print(f"Título/Editora: {self.titulo}/{self.editora}")
+            print(f"Categoria: {self.area}")
+            print(f"Ano: {self.ano}")
+            print(f"Valor: R$ {self.valor:.2f}")
+            print(f"Estoque: {self.quantidade_estoque} unidades")
+            
+            # chamando função para calcular o valor do Estoque
+            valor_estoque = calcula_valor_estoque(self.valor,self.quantidade_estoque)
+            print(f"Valor total em estoque: R$ {valor_estoque:.2f}")
+                
+            linha()
 
     # declarando lista e tornando conhecida em todo o código
     global lista_livros
     lista_livros=list()
+
+    ''' ---- FUNÇÕES/REQUISITOS PRINCIPAIS DO SISTEMA LIVRARIA ---- '''
+    # função para separar informações
+    def linha():
+        print('-='*20)
 
     # função calcula o valor do estoque de livros
     def calcula_valor_estoque(a, b):
@@ -39,51 +59,21 @@ try:
                                 quantidade_estoque=int(input("Número de unidades: "))))
         linha()
 
-    # função que mostra os livros cadastrados
-    def info_livros():
-        linha()
-        print(" ---- Livros cadastrados ---- ") # mensagem para situar o usuário
-        for livro in lista_livros:
-            print(f"\nCod#{livro.codigo}")
-            print(f"Título/Editora: {livro.titulo}/{livro.editora}")
-            print(f"Categoria: {livro.area}")
-            print(f"Ano: {livro.ano}")
-            print(f"Valor: R$ {livro.valor:.2f}")
-            print(f"Estoque: {livro.quantidade_estoque} unidades")
-            
-            # chamando função para calcular o valor do Estoque
-            valor_estoque = calcula_valor_estoque(livro.valor,livro.quantidade_estoque)
-            print(f"Valor total em estoque: R$ {valor_estoque:.2f}")
-            
-        linha()
-
     # função busca o livro pelo nome:
     def buscar_nome():
         linha()
         
-        nome = input("Título do livro: ").title()
+        nome = input("Título do livro: ").title() # nome do livro já normalizado
         
-        registro = False # variável é 'false' caso o livro não exista na lista
+        registro = False # variável é falsa caso o livro não exista na lista
         
         for livro in lista_livros:
             if nome in livro.titulo:
                 registro = True
-                print("\nLivro encontrado:")
-                print(f"\nCod#{livro.codigo}")
-                print(f"Título/Editora: {livro.titulo}/{livro.editora}")
-                print(f"Categoria: {livro.area}")
-                print(f"Ano: {livro.ano}")
-                print(f"Valor: R$ {livro.valor:.2f}")
-                print(f"Estoque: {livro.quantidade_estoque} unidades")
-                
-                # chamando função para calcular o valor do Estoque
-                valor_estoque = calcula_valor_estoque(livro.valor,livro.quantidade_estoque)
-                print(f"Valor total em estoque: R$ {valor_estoque:.2f}")
+                livro.info_livros()
         
         if not registro:
             print("Livro não encontrado!")
-        
-        linha()
         
     # função apresenta livros de uma categoria específica
     def categoria():
@@ -95,20 +85,10 @@ try:
         for livro in lista_livros:
             if categoria in livro.area:
                 registro = True
-                print(f"\nCod#{livro.codigo}")
-                print(f"Título/Editora: {livro.titulo}/{livro.editora}")
-                print(f"Categoria: {livro.area}")
-                print(f"Ano: {livro.ano}")
-                print(f"Valor: R$ {livro.valor:.2f}")
-                print(f"Estoque: {livro.quantidade_estoque} unidades")
-                
-                # chamando função para calcular o valor do Estoque
-                valor_estoque = calcula_valor_estoque(livro.valor,livro.quantidade_estoque)
-                print(f"Valor total em estoque: R$ {valor_estoque:.2f}")
+                livro.info_livros()
         
         if not registro:
             print("Não há livros com está categoria!")
-        linha()
 
     # função demonstra livros que tem preço menor do que um valor
     def limite_valor():
@@ -120,39 +100,23 @@ try:
         for livro in lista_livros:
             if livro.valor <= preco:
                 registro = True
-                print("\nLivro encontrado:")
-                print(f"\nCod#{livro.codigo}")
-                print(f"Título/Editora: {livro.titulo}/{livro.editora}")
-                print(f"Categoria: {livro.area}")
-                print(f"Ano: {livro.ano}")
-                print(f"Valor: R$ {livro.valor:.2f}")
-                print(f"Estoque: {livro.quantidade_estoque} unidades")
-                
-                # chamando função para calcular o valor do Estoque
-                valor_estoque = calcula_valor_estoque(livro.valor,livro.quantidade_estoque)
-                print(f"Valor total em estoque: R$ {valor_estoque:.2f}")
+                livro.info_livros()
         
         if not registro:
             print("Não há livros nessa faixa de preço!")
-        linha()
 
-    # função busca livros com valor de estoque maior que o indicado
+    # função mostrar o valor total em estoque da livraria com os livros
     def compara_valor_estoque():
         linha()
-        valor_indicado = float(input("Digite o valor do estoque: "))
+        soma = 0 # declarando soma
         
         for livro in lista_livros:
             # chamando função para calcular o valor do Estoque
             valor_estoque = calcula_valor_estoque(livro.valor,livro.quantidade_estoque)
-            
-            if valor_estoque >= valor_indicado:
-                print(f"\nCod#{livro.codigo}")
-                print(f"Título/Editora: {livro.titulo}/{livro.editora}")
-                print(f"Categoria: {livro.area}")
-                print(f"Ano: {livro.ano}")
-                print(f"Valor: R$ {livro.valor:.2f}")
-                print(f"Estoque: {livro.quantidade_estoque} unidades")
-                print(f"Valor total em estoque: R$ {valor_estoque:.2f}")
+            soma += valor_estoque # variável soma todos os valores de estoque a cada repetição
+        
+        print(f"O valor total em estoque de livros na livraria é de: R$ {soma:.2f}")
+
         linha()
 
     # função busca livros por quantidade de unidade
@@ -161,16 +125,12 @@ try:
         
         for livro in lista_livros:
             if livro.quantidade_estoque >= quantidade:
-                print(f"\nCod#{livro.codigo}")
-                print(f"Título/Editora: {livro.titulo}/{livro.editora}")
-                print(f"Categoria: {livro.area}")
-                print(f"Ano: {livro.ano}")
-                print(f"Valor: R$ {livro.valor:.2f}")
-                print(f"Estoque: {livro.quantidade_estoque} unidades")
-                
-                # chamando função para calcular o valor do Estoque
-                valor_estoque = calcula_valor_estoque(livro.valor,livro.quantidade_estoque)
-                print(f"Valor total em estoque: R$ {valor_estoque:.2f}")
+                livro.info_livros()
+    
+    # função que encerra o programa
+    def sair():
+        print("Você decidiu sair do programa! Volte sempre!")
+        raise(EOFError)
 
     # adicionando livros na lista
     livro1 = lista_livros.append(Livro(titulo="O Avesso Da Pele",
@@ -187,6 +147,9 @@ try:
                                 ano="2011",
                                 valor=78,
                                 quantidade_estoque=100))
+    '''Esses livros só foram adicionados para que eu pudesse testar
+    como a função que imprime os valores dos livros cadastrados funcionaria
+    '''
 
     # mensagem introdutória
     print("---- SISTEMA LIVRARIA ---- ")
@@ -215,7 +178,10 @@ try:
             if escolha == 1:
                 cadastro_livro()
             elif escolha == 2:
-                info_livros()
+                linha()
+                print(" ---- Livros cadastrados ---- ") # mensagem para situar o usuário
+                for livro in lista_livros:
+                    livro.info_livros()
             elif escolha == 3:
                 buscar_nome()
             elif escolha == 4:
@@ -229,25 +195,23 @@ try:
             elif escolha == 0:
                 sair()
 
-            # usuário decide após ação se deseja fazer mais alguma coisa
-            continuar = input("Deseja continuar? ").lower()
-            if continuar == 'nao':
-                print("Volte sempre.")
-                print("Saindo...")
-                print("\nFim do programa!")
-                repetir = False
+            invalido = True # variável para o laço
+            # laço de repetição impede que usuário digite algo diferente de 'sim' ou 'não'
+            while invalido:
+                # usuário decide após ação se deseja fazer mais alguma coisa
+                continuar = input("Deseja continuar? [Sim/Não]: ").lower()
 
-    # função que encerra o programa
-    def sair():
-        print("Você decidiu sair do programa! Volte sempre!")
-        raise(EOFError)
+                if continuar[0] == 'n': # pegando somente a primeira letra da resposta
+                    print("Volte sempre.")
+                    print("Saindo...")
+                    print("\nFim do programa!")
+                    repetir = False # encerra com o laço que continua apresentando as funções do menu
+                    invalido = False # encerra o laço de validação
+                elif continuar[0] == 's': # pegando somente a primeira letra da resposta
+                    invalido = False # encerra o laço de validação
+                else:
+                    print("Por favor, digite 'Sim' ou 'Não'!")
 
     menu()
 except EOFError:
     print("\nFim do programa!")
-
-
-
-
-
-
