@@ -41,6 +41,31 @@ try:
     def linha():
         print('-='*20)
 
+    # função para validar input do tipo float
+    def validar_float(entrada):
+        repetir = True
+        while repetir:
+            try:
+                entrada = entrada.replace(',', '.')
+                valor = float(entrada)
+                repetir = False
+                return(valor) # retorna o valor caso possa ser convertido
+            except ValueError:
+                print("Valor inválido! Digite novamente!")
+            entrada = input("Preço: ")
+
+    # função para validar input do tipo int
+    def valida_int(entrada):
+        repetir = True
+        while repetir:
+            try:
+                valor = int(entrada)
+                repetir = False
+                return(valor) # retorna o valor caso possa ser convertido
+            except ValueError:
+                print("Valor inválido! Digite novamente!")
+            entrada = input("Número de unidades: ")
+
     # função calcula o valor do estoque de livros
     def calcula_valor_estoque(a, b):
         # as variáveis recebem o preço e a quantidade de unidades para multiplicar
@@ -55,8 +80,8 @@ try:
                                 editora=input("Editora: ").title(),
                                 area=input("Área: ").title(),
                                 ano=input("Ano: "),
-                                valor=float(input("Valor: ")),
-                                quantidade_estoque=int(input("Número de unidades: "))))
+                                valor=validar_float(input("Valor: ")),
+                                quantidade_estoque=valida_int(input("Número de unidades: "))))
         linha()
 
     # função busca o livro pelo nome:
@@ -93,8 +118,10 @@ try:
     # função demonstra livros que tem preço menor do que um valor
     def limite_valor():
         linha()
+
         # usuário indica a faixa de preço que deseja
-        preco = float(input("Defina um limte de preço: "))
+        preco = validar_float(input("Defina um limte de preço: "))
+
         registro = False # variável é 'false' caso não haja livros até o valor informado
         
         for livro in lista_livros:
@@ -121,8 +148,8 @@ try:
 
     # função busca livros por quantidade de unidade
     def numero_unidades():
-        quantidade = int(input("Digite o número de unidades desejada: "))
-        
+        quantidade = valida_int(input("Digite o número de unidades desejada: "))
+
         for livro in lista_livros:
             if livro.quantidade_estoque >= quantidade:
                 livro.info_livros()
