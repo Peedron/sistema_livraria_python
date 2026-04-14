@@ -1,0 +1,3 @@
+0301;O Avesso Da Pele;2019;Literatura;Companhia Das Letras;47.6;50
+1203;Engenharia De Software;2011;Computação;Pressman;78.0;100
+978-65;Percy Jackson E Os Olimpianos: A Maldição Do Titã;2007;Literatura Infanto-Juvenil;Intrínseca;45.5;3000

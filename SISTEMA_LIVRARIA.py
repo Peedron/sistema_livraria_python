@@ -1,8 +1,8 @@
 ''' SISTEMA LIVRARIA
-Dia 02/04/2026:
-Estou fazendo a refatoração do código, fazendo com que a estrutura esteja
-mais próxima do que estudei em aula, além de montar corrigir pequenos
-detalhes de comunicação com o usuário.
+Dia 14/04/2026:
+Corrigi os tratamentos de erros e validações, 
+e adicionei a função para salvar os livros cadastrados no arquivo,
+a criei mais uma função para mostrar os livros cadastrados no arquivo.
 '''
 try:
     # criando classe 
@@ -47,29 +47,99 @@ try:
         while repetir:
             try:
                 entrada = entrada.replace(',', '.')
-                valor = float(entrada)
-                repetir = False
-                return(valor) # retorna o valor caso possa ser convertido
+                valor = float(entrada) # conversão do dado
+                
+                # laço verifica se o número não é negativos
+                validacao = True
+                while validacao:
+                    if valor < 0:
+                        print("Valor negativo! Digite novamente!")
+                        entrada = input("Qual é o preço? ") 
+                        validacao = False
+                    else:
+                        validacao = False
+                        repetir = False
             except ValueError:
-                print("Valor inválido! Digite novamente!")
-            entrada = input("Preço: ")
+                print("Erro, digite somente números!")
+                entrada = input("Preço: ")
+        
+        return(valor) # retorna o valor caso possa ser convertido
 
     # função para validar input do tipo int
-    def valida_int(entrada):
+    def validar_int(entrada):
         repetir = True
         while repetir:
             try:
-                valor = int(entrada)
-                repetir = False
-                return(valor) # retorna o valor caso possa ser convertido
+                valor = int(entrada) # conversão de dados
+
+                # laço verifica se o número não é negativo
+                validacao = True
+                while validacao:
+                    if valor < 0:
+                        print("Valor negativo! Digite novamente!")
+                        entrada = input("Número de unidades: ")
+                        validacao = False
+                    else:
+                        validacao = False
+                        repetir = False
             except ValueError:
-                print("Valor inválido! Digite novamente!")
-            entrada = input("Número de unidades: ")
+                print("Erro, digite somente números!")
+                entrada = input("Número de unidades: ")
+        
+        return(valor) # retorna o valor caso possa ser convertido
+
+    # função para validar ano do livro
+    def validar_ano(entrada):
+        repetir = True
+        while repetir:
+            if len(entrada) == 4:
+                year = int(entrada) # conversão para inteiro para fazer a comparação
+                
+                # condição de comparação para o ano ser aceito
+                if year >= 1455 and year <= 2026:
+                    repetir = False
+                else:
+                    print("Não há livros publicados nesse ano!")
+                    print("Digite novamente!")
+                    entrada = input("Ano: ")
+            else:
+                print("Erro, digite um ano válido!")
+                entrada = input("Ano: ")
+        
+        return(year)
+
+    # função para exibir os livros cadastrados
+    def estoque_livros():
+        linha()
+        with open("livros_cadastrados.txt", "r") as arquivo: # abrindo o arquivo para leitura
+            if not arquivo: # caso o arquivo esteja vazio, a mensagem é exibida
+                print("Não há livros cadastrados no estoque!")
+            else:
+                for line in arquivo: # cada linha do arquivo é lida
+                    dados = line.strip().split(';') # os dados são separados por ';' e armazenados em uma lista
+                    print(f"\nCod#{dados[0]}") # cada dado é acessado por seu índice na lista
+                    print(f"Título/Editora: {dados[1]}/{dados[4]}")
+                    print(f"Categoria: {dados[3]}")
+                    print(f"Ano: {dados[2]}")
+                    print(f"Valor: R$ {float(dados[5]):.2f}")
+                    print(f"Estoque: {dados[6]} unidades")
+                    
+                    # chamando função para calcular o valor do Estoque
+                    valor_estoque = calcula_valor_estoque(float(dados[5]),int(dados[6]))
+                    print(f"Valor total em estoque: R$ {valor_estoque:.2f}")
+        linha()
+
+    # função para salvar os livros cadastrados no arquivo
+    def salvar_estoque():
+        with open("livros_cadastrados.txt", "a") as arquivo: # abrindo o arquivo para escrita
+            for livro in lista_livros: # livro é o objeto da classe Livro, e cada um dos atributos é separado por ';' para facilitar a leitura do arquivo
+                arquivo.write(f"{livro.codigo};{livro.titulo};{livro.ano};{livro.area};{livro.editora};{livro.valor:.2f};{livro.quantidade_estoque}\n")
+                # a cada repetição do laço, um livro é escrito no arquivo, e cada atributo é separado por ';' para facilitar a leitura do arquivo
 
     # função calcula o valor do estoque de livros
-    def calcula_valor_estoque(a, b):
+    def calcula_valor_estoque(preco, quantidade):
         # as variáveis recebem o preço e a quantidade de unidades para multiplicar
-        valor = a * b
+        valor = preco * quantidade
         return (valor)
 
     # função de cadastro de livros
@@ -79,11 +149,12 @@ try:
                                 codigo=input("Código: "),
                                 editora=input("Editora: ").title(),
                                 area=input("Área: ").title(),
-                                ano=input("Ano: "),
+                                ano=validar_ano(input("Ano: ")),
                                 valor=validar_float(input("Valor: ")),
-                                quantidade_estoque=valida_int(input("Número de unidades: "))))
+                                quantidade_estoque=validar_int(input("Número de unidades: "))))
+        print("\nLivro cadastrado com sucesso!")
         linha()
-
+        
     # função busca o livro pelo nome:
     def buscar_nome():
         linha()
@@ -148,15 +219,15 @@ try:
 
     # função busca livros por quantidade de unidade
     def numero_unidades():
-        quantidade = valida_int(input("Digite o número de unidades desejada: "))
+        quantidade = validar_int(input("Digite o número de unidades desejada: "))
 
         for livro in lista_livros:
-            if livro.quantidade_estoque >= quantidade:
+            if quantidade >= livro.quantidade_estoque:
                 livro.info_livros()
     
     # função que encerra o programa
     def sair():
-        print("Você decidiu sair do programa! Volte sempre!")
+        print("Encerrando atividades...")
         raise(EOFError)
 
     # adicionando livros na lista
@@ -178,14 +249,12 @@ try:
     como a função que imprime os valores dos livros cadastrados funcionaria
     '''
 
-    # mensagem introdutória
-    print("---- SISTEMA LIVRARIA ---- ")
-
+    # mensagens introdutórias
+    print("---- SISTEMA LIVRARIA ---- \n\n")
+    print("Bem vindo ao programa livraria! :)")
+    print("Essas são as opções do programa:\n")
     # menu principal do usuário
     def menu():
-        print("Bem vindo ao programa livraria! :)")
-        print("Essas são as opções do programa:\n")
-
         repetir = True
         while repetir:
             # apresentando opções
@@ -196,39 +265,94 @@ try:
             print('5 - Buscar livros por preço')
             print('6 - Busca por quantidade em estoque')
             print('7 - Valor total no estoque')
+            print('8 - Carregar estoque de livros')
+            print('9 - Atualizar arquivo de livros cadastrados')
             print('0 - Encerrar atividades')
             
             print("\nO que quer fazer?")
-            escolha = int(input("Sua escolha: "))
+            
+            # laço impede do programa para próxima pergunta
+            validacao = True
+            while validacao:
+                # tratando conversão errada
+                try:
+                    escolha = int(input("Sua escolha: "))
+                    # estrutura de decisão
+                    if escolha == 1:
+                        cadastro_livro()
+                        validacao = False
+                    elif escolha == 2:
+                        linha()
+                        print(" ---- Livros cadastrados ---- ") # mensagem para situar o usuário
+                        for livro in lista_livros:
+                            livro.info_livros()
+                        validacao = False
+                    elif escolha == 3:
+                        buscar_nome()
+                        validacao = False
+                    elif escolha == 4:
+                        categoria()
+                        validacao = False
+                    elif escolha == 5:
+                        limite_valor()
+                        validacao = False
+                    elif escolha == 6:
+                        numero_unidades()
+                        validacao = False
+                    elif escolha == 7:
+                        compara_valor_estoque()
+                        validacao = False
+                    elif escolha == 8:
+                        print("Função em desenvolvimento!")
+                        validacao = False
+                    elif escolha == 9:
+                        print(" ---- Livros cadastrados no estoque ---- ") # mensagem para situar o usuário
+                        estoque_livros()
+                        validacao = False
+                    elif escolha == 0:
+                        pergunta = input("\nDeseja salvar as alterações antes de sair? [Sim/Não]: ").lower()
 
-            # estrutura de decisão
-            if escolha == 1:
-                cadastro_livro()
-            elif escolha == 2:
-                linha()
-                print(" ---- Livros cadastrados ---- ") # mensagem para situar o usuário
-                for livro in lista_livros:
-                    livro.info_livros()
-            elif escolha == 3:
-                buscar_nome()
-            elif escolha == 4:
-                categoria()
-            elif escolha == 5:
-                limite_valor()
-            elif escolha == 6:
-                numero_unidades()
-            elif escolha == 7:
-                compara_valor_estoque()
-            elif escolha == 0:
-                sair()
+                        invalido = True # variável para o laço
+                        while invalido:
+                            if pergunta[0] == 's': # pegando somente a primeira letra da resposta
+                                salvar_estoque()
+                                print("Alterações salvas com sucesso!")
+                                invalido = False # encerra o laço de validação
+                            elif pergunta[0] == 'n': # pegando somente a primeira letra da resposta
+                                print("Alterações não salvas!")
+                                invalido = False # encerra o laço de validação
+                            else:
+                                print("Por favor, digite 'Sim' ou 'Não'!")
+
+                        sair()
+                        validacao = False
+                    else:
+                        print("Digite um dos números acima para avançar, por favor!")
+                        # laço não encerra até uma das opções ser selecionada
+                except ValueError:
+                    print("Erro, digite somente números!")
 
             invalido = True # variável para o laço
             # laço de repetição impede que usuário digite algo diferente de 'sim' ou 'não'
             while invalido:
-                # usuário decide após ação se deseja fazer mais alguma coisa
+                # usuário decide, após ação, se deseja fazer mais alguma coisa
                 continuar = input("Deseja continuar? [Sim/Não]: ").lower()
 
                 if continuar[0] == 'n': # pegando somente a primeira letra da resposta
+                    pergunta = input("\nDeseja salvar as alterações antes de sair? [Sim/Não]: ").lower()
+
+                    salvar = True # variável para o laço
+                    while salvar:
+                        if pergunta[0] == 's': # pegando somente a primeira letra da resposta
+                            salvar_estoque()
+                            print("Alterações salvas com sucesso!")
+                            salvar = False # encerra o laço de validação
+                        elif pergunta[0] == 'n': # pegando somente a primeira letra da resposta
+                            print("Alterações não salvas!")
+                            salvar = False # encerra o laço de validação
+                        else:
+                            print("Por favor, digite 'Sim' ou 'Não'!")
+                    
                     print("Volte sempre.")
                     print("Saindo...")
                     print("\nFim do programa!")
