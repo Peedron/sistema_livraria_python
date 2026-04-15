@@ -36,11 +36,11 @@ try:
     global lista_livros
     lista_livros=list()
 
-    ''' ---- FUNÇÕES/REQUISITOS PRINCIPAIS DO SISTEMA LIVRARIA ---- '''
     # função para separar informações
     def linha():
         print('-='*20)
 
+    ''' ---- FUNÇÕES AUXILIARES PARA VALIDAÇÃO DE DADOS ---- '''
     # função para validar input do tipo float
     def validar_float(entrada):
         repetir = True
@@ -108,6 +108,58 @@ try:
         
         return(year)
 
+    # função para validar as strings do título, editora e área do livro
+    def validar_string(entrada):
+
+        repetir = True
+        while repetir:
+
+            entrada = entrada.replace(';', '') # o título não pode conter ';' para evitar problemas na leitura do arquivo
+            variavel = " ".join(entrada.split()) # normalizando o título para remover espaços extras entre as palavras
+            variavel = variavel.strip() # removendo espaços extras no inicio e no fim do título
+
+            if len(variavel) > 0 and len(variavel) <= 100: # o título deve ter entre 1 e 100 caracteres
+                variavel = variavel.title() # normalizando o nome para título
+                repetir = False
+            else:
+                print("Entrada inválida! Digite novamente!")
+                entrada = input("Entrada: ")
+        
+        return(variavel) # retorna o título normalizado caso seja válido
+
+    # função para validar o código do livro
+    def validar_codigo(entrada):
+        repetir = True
+        while repetir:
+            if len(entrada.strip()) > 0 and len(entrada.strip()) <= 6: # o código deve ter entre 1 e 6 caracteres
+                
+                valido = entrada.isalnum() # o código deve ser alfanumérico
+                if not valido:
+                    print("Código inválido! O código deve conter somente letras e números!")
+                    print("Digite novamente!")
+                    entrada = input("Código: ")
+                else:
+                    cod = entrada.upper() # normalizando o código para maiúsculo
+                    repetir = False
+            else:
+                print("Código inválido! O código deve conter entre 1 e 6 caracteres!\n")
+                print("Digite novamente!")
+                entrada = input("Código: ")
+        
+        return(cod) # retorna o código normalizado caso seja válido
+
+        repetir = True
+        while repetir:
+            if len(entrada.strip()) > 0 and len(entrada.strip()) <= 50: # a área deve ter entre 1 e 50 caracteres
+                area = entrada.title().strip() # normalizando a área para título
+                repetir = False
+            else:
+                print("Área inválida! Digite novamente!")
+                entrada = input("Área: ")
+        
+        return(area) # retorna a área normalizada caso seja válida
+
+    ''' ---- FUNÇÕES PRINCIPAIS DO PROGRAMA ---- '''
     # função para exibir os livros cadastrados
     def estoque_livros():
         linha()
@@ -145,10 +197,10 @@ try:
     # função de cadastro de livros
     def cadastro_livro():
         linha()
-        lista_livros.append(Livro(titulo=input("Título do livro: ").title(),
-                                codigo=input("Código: "),
-                                editora=input("Editora: ").title(),
-                                area=input("Área: ").title(),
+        lista_livros.append(Livro(titulo=validar_string(input("Título do livro: ")),
+                                codigo=validar_codigo(input("Código: ")),
+                                editora=validar_string(input("Editora: ")),
+                                area=validar_string(input("Área: ")),
                                 ano=validar_ano(input("Ano: ")),
                                 valor=validar_float(input("Valor: ")),
                                 quantidade_estoque=validar_int(input("Número de unidades: "))))
@@ -159,7 +211,7 @@ try:
     def buscar_nome():
         linha()
         
-        nome = input("Título do livro: ").title() # nome do livro já normalizado
+        nome = input("Título do livro: ").title().strip() # nome do livro já normalizado
         
         registro = False # variável é falsa caso o livro não exista na lista
         
@@ -175,7 +227,7 @@ try:
     def categoria():
         linha()
         # recebendo a categoria
-        categoria = input("Categoria de livros: ").title()
+        categoria = input("Categoria de livros: ").title().strip() # categoria já normalizada
         
         registro = False # variável é 'false' caso a categoria não exista na lista
         for livro in lista_livros:
@@ -230,29 +282,6 @@ try:
         print("Encerrando atividades...")
         raise(EOFError)
 
-    # adicionando livros na lista
-    livro1 = lista_livros.append(Livro(titulo="O Avesso Da Pele",
-                                codigo="0301",
-                                editora="Companhia Das Letras",
-                                area="Romance",
-                                ano="2019",
-                                valor=47.60,
-                                quantidade_estoque=50))
-    livro2 = lista_livros.append(Livro(titulo="Engenharia de Software",
-                                codigo="1203",
-                                editora="Pressman",
-                                area="Computação",
-                                ano="2011",
-                                valor=78,
-                                quantidade_estoque=100))
-    '''Esses livros só foram adicionados para que eu pudesse testar
-    como a função que imprime os valores dos livros cadastrados funcionaria
-    '''
-
-    # mensagens introdutórias
-    print("---- SISTEMA LIVRARIA ---- \n\n")
-    print("Bem vindo ao programa livraria! :)")
-    print("Essas são as opções do programa:\n")
     # menu principal do usuário
     def menu():
         repetir = True
@@ -363,6 +392,30 @@ try:
                 else:
                     print("Por favor, digite 'Sim' ou 'Não'!")
 
+    # adicionando livros na lista
+    livro1 = lista_livros.append(Livro(titulo="O Avesso Da Pele",
+                                codigo="0301",
+                                editora="Companhia Das Letras",
+                                area="Romance",
+                                ano="2019",
+                                valor=47.60,
+                                quantidade_estoque=50))
+    livro2 = lista_livros.append(Livro(titulo="Engenharia de Software",
+                                codigo="1203",
+                                editora="Pressman",
+                                area="Computação",
+                                ano="2011",
+                                valor=78,
+                                quantidade_estoque=100))
+    '''Esses livros só foram adicionados para que eu pudesse testar
+    como a função que imprime os valores dos livros cadastrados funcionaria
+    '''
+
+    # mensagens introdutórias
+    print("---- SISTEMA LIVRARIA ---- \n\n")
+    print("Bem vindo ao programa livraria! :)")
+    print("Essas são as opções do programa:\n")
+    
     menu()
 except EOFError:
     print("\nFim do programa!")
