@@ -1,3 +1,6 @@
-0301;O Avesso Da Pele;2019;Literatura;Companhia Das Letras;47.6;50
-1203;Engenharia De Software;2011;Computação;Pressman;78.0;100
-978-65;Percy Jackson E Os Olimpianos: A Maldição Do Titã;2007;Literatura Infanto-Juvenil;Intrínseca;45.5;3000
+0301;O Avesso Da Pele;2019;Literatura;Companhia Das Letras;47.60;50;FL01
+0301;O Avesso Da Pele;2019;Literatura;Companhia Das Letras;54.23;23;FL02
+1203;Engenharia De Software;2011;Computação;Pressman;78.00;100;FL01
+978-65;Percy Jackson E Os Olimpianos: A Maldição Do Titã;2007;Literatura Infanto-Juvenil;Intrínseca;45.50;3000;FL02
+978-65;O Hobbit;1937;Fantasia;HarperCollins;39.90;5000;FL02
+978-65;O Senhor Dos Anéis: A Sociedade Do Anel;1954;Fantasia;HarperCollins;59.90;4000;FL02
