@@ -1,8 +1,12 @@
 ''' SISTEMA LIVRARIA
-Dia 03/05/2026:
-Renomeiei o nome do arquivo princpal do código e dividi em outros arquivos
-as funções principais e de validação e as classes utilizadas no programa
-para melhor organização. Ainda não fiz o tratamento de exceções da função
+Dia 17/05/2026:
+Criei mais um arquivo para separar uma possível solução para o programa
+que utiliza classmethod e os conceitos de herança, que não vou utilizar por enquanto.
+Também separei os menus do programa, deixando o que contém as escolhas do usuário
+no arquivo de "funções_principais" e o de apresentação no "__main__".
+Neste momento, o mais importante é entender como estruturas os novos requisitos do sistema
+fazendo para que eles não quebre o programa. 
+Ainda não fiz o tratamento de exceções da função
 salvar_estoque, o que precisa ser revisado. Além de ajustar as classes
 e entender qual é a melhor saída para mostrar as informações da Filial em que
 cada livro está em 'dados.py'.
@@ -11,15 +15,11 @@ Preciso pensar em como desenvolver a saída de valores que estão em diferentes 
 os valores atualmente se repetem, ou seja, o método imprime o mesmo livro duas vezes,
 e não só as informações divergentes (valor e quantidade de estoque).
 '''
-from funcoes_principais import(cadastro_livro,listagem_de_livros,
-                                buscar_nome,categoria,limite_valor,
-                                numero_unidades,compara_valor_estoque,
-                                estoque_livros,salvar_estoque,sair,separador)
-
+from funcoes_principais import(menu_de_opcoes,sair,separador)
 from funcoes_validacao import validar_pergunta
 
 # menu principal do usuário
-def menu():
+def menu_de_apresentacao():
     repetir = True
     while repetir:
         # apresentando opções
@@ -34,52 +34,8 @@ def menu():
         print('9 - Atualizar arquivo de livros cadastrados')
         print('0 - Encerrar atividades')
         
-        print("\nO que quer fazer?")
-        escolha = input("Sua escolha: ")
-        
-        # laço para validar as escolhas feitas no menu
-        validacao = True
-        while validacao:
-            try:
-                escolha = int(escolha) # só parte para as estrturas caso possa ser convertido
-                # estrutura de decisão
-                if escolha == 1:
-                    cadastro_livro()
-                    validacao = False
-                elif escolha == 2:
-                    listagem_de_livros()
-                    validacao = False
-                elif escolha == 3:
-                    buscar_nome()
-                    validacao = False
-                elif escolha == 4:
-                    categoria()
-                    validacao = False
-                elif escolha == 5:
-                    limite_valor()
-                    validacao = False
-                elif escolha == 6:
-                    numero_unidades()
-                    validacao = False
-                elif escolha == 7:
-                    compara_valor_estoque()
-                    validacao = False
-                elif escolha == 8:
-                    estoque_livros()
-                    validacao = False
-                elif escolha == 9:
-                    salvar_estoque()
-                    validacao = False
-                elif escolha == 0:
-                    sair()
-                    validacao = False
-                else:
-                    print("Número inteiro fora das opções!")
-                    escolha = input("\nSua escolha: ")
-                    # laço não encerra até uma das opções ser selecionada
-            except ValueError:
-                print("Erro, o campo só aceita números inteiros!")
-                escolha = input("\nSua escolha: ")
+        # chamando a função para validar a escolha do usuário
+        menu_de_opcoes()
 
         # Fazendo a resposta do código ser mais dinâmica
         resposta = validar_pergunta('\nContinuar?[Sim/Não]: ')
@@ -96,6 +52,6 @@ print("Bem vindo ao programa livraria! :)")
 print("Essas são as opções do programa:\n")
 
 try:
-    menu()
+    menu_de_apresentacao()
 except EOFError:
     print("\nFim do programa!")

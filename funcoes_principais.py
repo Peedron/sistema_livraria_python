@@ -3,6 +3,55 @@ from funcoes_validacao import (validar_pergunta,validar_int,validar_ano,validar_
                                validar_float,validar_string,validar_filial)
 
 ''' ---- FUNÇÕES PRINCIPAIS DO PROGRAMA ---- '''
+# menu que recebe a escolha do usuário
+def menu_de_opcoes():
+    print("\nO que quer fazer?")
+    escolha = input("Sua escolha: ")
+
+    # laço para validar as escolhas feitas no menu
+    validacao = True
+    while validacao:
+        try:
+            escolha = int(escolha) # só parte para as estrturas caso possa ser convertido
+            # estrutura de decisão
+            if escolha == 1:
+                cadastro_livro()
+                validacao = False
+            elif escolha == 2:
+                listagem_de_livros()
+                validacao = False
+            elif escolha == 3:
+                buscar_nome()
+                validacao = False
+            elif escolha == 4:
+                categoria()
+                validacao = False
+            elif escolha == 5:
+                limite_valor()
+                validacao = False
+            elif escolha == 6:
+                numero_unidades()
+                validacao = False
+            elif escolha == 7:
+                compara_valor_estoque()
+                validacao = False
+            elif escolha == 8:
+                estoque_livros()
+                validacao = False
+            elif escolha == 9:
+                salvar_estoque()
+                validacao = False
+            elif escolha == 0:
+                sair()
+                validacao = False
+            else:
+                print("Número inteiro fora das opções!")
+                escolha = input("\nSua escolha: ")
+                # laço não encerra até uma das opções ser selecionada
+        except ValueError:
+            print("Erro, o campo só aceita números inteiros!")
+            escolha = input("\nSua escolha: ")
+
 # função para separar informações
 def separador():
     print('-='*20)
@@ -22,7 +71,7 @@ def estoque_livros():
     lista_livros.clear() # esvaziando a lista caso os dados do arquivo já tenham sido baixados
     with open("livros_cadastrados.txt", "r") as arquivo: # abrindo o arquivo para leitura
         for linha in arquivo:
-            dados = linha.strip().split(";") # tirando os espaços e separando as informações por ;
+            dados = linha.strip().split(";") # tirando os espaços e separando as informações por ';'
 
             lista_livros.append(Livro(codigo=dados[0],
                                       titulo=dados[1],
@@ -54,6 +103,8 @@ def listagem_de_livros():
 def salvar_estoque():
     with open("livros_cadastrados.txt", "a") as arquivo: # abrindo o arquivo para escrita
         for livro in lista_livros: # livro é o objeto da classe Livro, e cada um dos atributos é separado por ';' para facilitar a leitura do arquivo
+            if livro.filial == 'FL01':
+                arquivo.write(f"")
             arquivo.write(f"{livro.codigo};{livro.titulo};{livro.ano};{livro.area};{livro.editora};{livro.valor:.2f};{livro.quantidade_estoque}\n")
             # a cada repetição do laço, um livro é escrito no arquivo, e cada atributo é separado por ';' para facilitar a leitura do arquivo
 
