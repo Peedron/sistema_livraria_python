@@ -1,4 +1,4 @@
-from dados import Livro, lista_livros, Filial, lista_filiais
+from dados import Livro, lista_livros, Filial, lista_filiais, lista_livros_filial
 from funcoes_validacao import (validar_pergunta,validar_int,validar_ano,validar_codigo,
                                validar_float,validar_string,validar_filial)
 
@@ -68,12 +68,12 @@ def estoque_livros():
 
     print("Carregando livros cadastrados...\n")
     
-    lista_livros.clear() # esvaziando a lista caso os dados do arquivo já tenham sido baixados
+    '''lista_livros.clear() # esvaziando a lista caso os dados do arquivo já tenham sido baixados
     with open("livros_cadastrados.txt", "r") as arquivo: # abrindo o arquivo para leitura
         for linha in arquivo:
             dados = linha.strip().split(";") # tirando os espaços e separando as informações por ';'
 
-            lista_livros.append(Livro(codigo=dados[0],
+            lista_livros.append(Livro(codigo_livro=dados[0],
                                       titulo=dados[1],
                                       ano=int(dados[2]),
                                       area=dados[3],
@@ -82,7 +82,7 @@ def estoque_livros():
                                       quantidade_estoque=int(dados[6]),
                                       filial=dados[7]))
     print("O estoque de livros foi baixado!")
-    separador()
+    separador()'''
 
 # função para mostrar os livros baixados do estoque (arquivo)
 def listagem_de_livros():
@@ -98,7 +98,7 @@ def listagem_de_livros():
             livro.info_livros()
         
     separador()
-                
+
 # função para salvar os livros cadastrados no arquivo
 def salvar_estoque():
     with open("livros_cadastrados.txt", "a") as arquivo: # abrindo o arquivo para escrita
@@ -121,7 +121,7 @@ def calcula_valor_estoque(preco, quantidade):
 def cadastro_livro():
     separador()
     lista_livros.append(Livro(titulo=validar_string(input("Título do livro: ")),
-                            codigo=validar_codigo(input("Código[de 1 a 6 caracteres]: ")),
+                            codigo_livro=validar_codigo(input("Código[de 1 a 6 caracteres]: ")),
                             editora=validar_string(input("Editora: ")),
                             area=validar_string(input("Área: ")),
                             ano=validar_ano(input("Ano: ")),

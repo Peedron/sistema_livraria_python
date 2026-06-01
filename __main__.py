@@ -4,8 +4,8 @@ Criei mais um arquivo para separar uma possível solução para o programa
 que utiliza classmethod e os conceitos de herança, que não vou utilizar por enquanto.
 Também separei os menus do programa, deixando o que contém as escolhas do usuário
 no arquivo de "funções_principais" e o de apresentação no "__main__".
-Neste momento, o mais importante é entender como estruturas os novos requisitos do sistema
-fazendo para que eles não quebre o programa. 
+Neste momento, o mais importante é entender como estruturar os novos requisitos do sistema
+para que eles não quebre o programa. 
 Ainda não fiz o tratamento de exceções da função
 salvar_estoque, o que precisa ser revisado. Além de ajustar as classes
 e entender qual é a melhor saída para mostrar as informações da Filial em que

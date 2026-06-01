@@ -1,9 +1,9 @@
 # criando classe 
 class Livro:
     # definindo os atributos da classe
-    def __init__(self, titulo,codigo,editora,area,ano,valor,quantidade_estoque,filial):
+    def __init__(self, titulo,codigo_livro,editora,area,ano,valor,quantidade_estoque,filial):
         self.titulo = titulo
-        self.codigo = codigo
+        self.codigo = codigo_livro
         self.editora = editora
         self.area = area
         self.ano = ano
@@ -32,15 +32,18 @@ lista_livros=list()
 # nova classe do sistema
 class Filial:
     # definindo os atributos da classe
-    def __init__(self,codigo,nome,endereco,contato,livros_estoque):
-        self.codigo = 'FL' + codigo
+    def __init__(self,codigo_filial,nome,endereco,contato,livros_estoque):
+        self.codigo = '#FL' + codigo_filial
         self.nome = nome
         self.endereco = endereco
         self.contato = contato
         self.livros_estoque = livros_estoque
     
-    def info_filiais(self):
-        print(f"Livros em estoque: {self.livros_estoque} unidades")
+    def exibe_estoque(self):
+        for filial in lista_filiais:
+            print(f"Livros da filial {filial.nome}:\n")
+            for livro in lista_livros_filial:
+                print(f"{livro.titulo}\n")
     
 # declarando lista de filiais
 lista_filiais=list()
@@ -50,6 +53,7 @@ lista_livros_filial=list()
 # função para validar o estoque de livros de cada filial
 def conferir_estoque(quantidade):
     with open('livros_cadastrados.txt', 'r') as arquivo:
+        primeira_linha = arquivo.readlines() # ignorando a primeira linha
         for linha in arquivo:
             dados = linha.strip().split(';')
             for filial in lista_filiais:
@@ -61,17 +65,17 @@ def conferir_estoque(quantidade):
     return quantidade
 
 # adicionando filiais
-lista_filiais.append(Filial(codigo='01',
+lista_filiais.append(Filial(codigo_filial='01',
             nome="Zona Norte",
             endereco="Voluntários da Pátria - 1354",
             contato="5040-3010",
             livros_estoque=conferir_estoque(0)))
-lista_filiais.append(Filial(codigo="02",
+lista_filiais.append(Filial(codigo_filial="02",
                                 nome="Menino Deus",
                                 endereco="Getúlio Vargas - 501",
                                 contato="4120-6709",
                                 livros_estoque=conferir_estoque(0)))
-lista_filiais.append(Filial(codigo="03",
+lista_filiais.append(Filial(codigo_filial="03",
                                 nome="Centro",
                                 endereco="Duque de Caxias - 890",
                                 contato="9001-2530",
